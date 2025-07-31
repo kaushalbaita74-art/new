@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>College Preference Ranking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      padding: 20px;
+    }
+    h2 {
+      color: #333;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      max-width: 400px;
+    }
+    li {
+      padding: 12px;
+      margin: 6px 0;
+      background: #fff;
+      border: 1px solid #ccc;
+      cursor: grab;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Drag and Drop to Rank Your College Preferences</h2>
+  <ul id="collegeList">
+    <li draggable="true">AIIMS Delhi</li>
+    <li draggable="true">JIPMER Puducherry</li>
+    <li draggable="true">MAMC Delhi</li>
+    <li draggable="true">KGMU Lucknow</li>
+    <li draggable="true">AFMC Pune</li>
+    <li draggable="true">BHIMS Bhopal</li>
+  </ul>
+
+  <button onclick="submitPreferences()">Submit Preferences</button>
+
+  <script>
+    const list = document.getElementById('collegeList');
+    let dragItem = null;
+
+    list.addEventListener('dragstart', (e) => {
+      dragItem = e.target;
+      e.dataTransfer.effectAllowed = "move";
+    });
+
+    list.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      const target = e.target;
+      if (target && target !== dragItem && target.nodeName === "LI") {
+        const rect = target.getBoundingClientRect();
+        const next = (e.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
+        list.insertBefore(dragItem, next && target.nextSibling || target);
+      }
+    });
+
+    function submitPreferences() {
+      const colleges = [...document.querySelectorAll("#collegeList li")].map(li => li.textContent);
+      alert("Your Preferences:\n" + colleges.join("\n"));
+      console.log("Submitted Order:", colleges);
+      // Here you could send it to a backend with fetch/AJAX if needed
+    }
+  </script>
+
+</body>
+</html>
